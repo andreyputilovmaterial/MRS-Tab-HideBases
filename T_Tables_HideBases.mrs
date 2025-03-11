@@ -1,0 +1,10 @@
+﻿
+
+
+WriteLog(logMe, "Running code that hides bases...", LL_METRIC)
+
+HideBasesIterateTables(tabledoc.tables)
+
+WriteLog(logMe, "Code for hiding bases has finished working", LL_METRIC)
+
+

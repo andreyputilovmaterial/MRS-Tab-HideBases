@@ -1,0 +1,72 @@
+﻿
+
+sub HideBasesIterateTables(tables)
+	dim iter
+	for each iter in tables
+		'WriteLog(logMe, "Processing: "+ctext(iter.name)+"", LL_METRIC)
+		'debug.log("Processing: "+ctext(iter.name)+"")
+		'debug.echo("Processing: "+ctext(iter.name)+"")
+		HideBasesIterateSubaxes(iter.axes[0])
+		HideBasesIterateElements(iter.axes[0])
+	next
+end sub
+
+sub HideBasesIterateSubaxes(item)
+	dim iter
+	for each iter in item.subaxes
+		HideBasesIterateSubaxes(iter)
+		HideBasesIterateElements(iter)
+	next
+end sub
+
+sub HideBasesIterateElements(item)
+	dim iter, hasSomethingVisible
+	hasSomethingVisible = false ' necessary for share tables
+	for each iter in item.elements
+		hasSomethingVisible = hasSomethingVisible or ( not HideBasesIsElementABase(iter) and not iter.ishidden )
+	next
+	if hasSomethingVisible then
+		for each iter in item.elements
+			if HideBasesIsElementABase(iter) then
+				'debug.echo("Found base: "+ctext(iter.name)+"")
+				'debug.log("Found base: "+ctext(iter.name)+"")
+				iter.ishidden = true
+			end if
+		next
+	end if
+end sub
+
+function HideBasesIsElementABase(elem)
+	HideBasesIsElementABase = (elem.type=24) or (elem.type=3) or (elem.type=1)
+	' 0 = Category
+	' 1 = Base
+	' 2 = TableStatistic
+	' 3 = EffectiveBase
+	' 4 = SumWeightsSquared
+	' 5 = SumN
+	' 6 = SumX
+	' 7 = SumXSquared
+	' 8 = SumUnweightedN
+	' 9 = Mean
+	' 10 = StdDev
+	' 11 = StdErr
+	' 12 = SampleVar
+	' 13 = Total
+	' 14 = SubTotal
+	' 15 = Text
+	' 16 = NetDiffs
+	' 17 = PairedPrefs
+	' 18 = Minimum
+	' 19 = Maximum
+	' 20 = OtherDerived
+	' 21 = Net
+	' 22 = Combine
+	' 23 = Expression
+	' 24 = UnweightedBase
+	' 25 = Numeric
+	' 26 = Derived
+	' 27 = Profile
+	' 28 = ProfileResult
+end function
+
+
